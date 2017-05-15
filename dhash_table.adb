@@ -46,5 +46,6 @@ package body dhash_table is
 	end put;
 
 	-- Insert new extern node into an intern node by a key passed by arguments
+	-- hola
 
 end dhash_table;
