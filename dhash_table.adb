@@ -45,4 +45,6 @@ package body dhash_table is
 		when storage_error => raise space_overflow;
 	end put;
 
+	-- Insert new extern node into an intern node by a key passed by arguments
+
 end dhash_table;
