@@ -22,7 +22,7 @@ package dhash_table is
 	-- Insert new element into the dispersion table
 	procedure put (h : in out hash_table; k : in key; x : in item);
 
-	-- Insert new intern node into a extern node 
+	-- Insert new extern node into an intern node 
 	procedure put_intern (h : in out hash_table; k : in key; x : in item; 
 																   e : in enum);
 
@@ -48,18 +48,18 @@ private
 	type node (tn : t_node) is 
 		record 
 			case tn is
-				when extern =>
+				when intern =>
 					k : key;
 					x : item;
 					next_int : pnode;
-					next_ext : pnode;
-				when intern =>
+					first_ext : pnode;
+				when extern =>
 					x : enum;
-					next_int : pnode;
+					next_ext : pnode;
 			end case;
 		end record;
 
-	type dispersion_table is array (natural range 0..b-1) of pnode;
+	type dispersion_table is array (natural range 0..size-1) of pnode;
 	type a_of_lists is array (enum) of list;
 
 	type hash_table is

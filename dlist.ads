@@ -1,13 +1,10 @@
+with exceptions; use exceptions;
 generic 
 	type item is (<>);
 package dlist is
 	
 	type list is limited private;
 	
-	-- Exceptions
-	bad_use : exception;
-	space_overflow : exception;
-
 	-- Prepare the list to empty list
 	procedure empty (l : out list);
 	pragma inline(empty);
