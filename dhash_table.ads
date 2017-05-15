@@ -1,3 +1,4 @@
+with exceptions; use exceptions;
 generic
 
 	type enum is private;
@@ -11,21 +12,23 @@ package dhash_table is
 	type dispersion_table is limited private;
 	type pnode is private;
 
+	-- List package
 	package pointerlist is new dlist (item => pnode);
 	use pointerlist;
-
-	-- Exceptions
-	bad_use : exception;
-	space_overflow : exception;
 
 	-- Prepare the dispersion table to empty
 	procedure empty (h : out hash_table);
 
 	-- Insert new element into the dispersion table
-	procedure register (h : in out hash_table; k : in key; x : in item);
+	procedure put (h : in out hash_table; k : in key; x : in item);
+
+	-- Insert new intern node into a extern node 
+	procedure put_intern (h : in out hash_table; k : in key; x : in item; 
+																   e : in enum);
 
 	-- Check if the item is in the dispersion table
-	function is_in (h : in out hash_table; k : in key; x : in item) return boolean;
+	function is_in (h : in out hash_table; k : in key; x : in item) 
+																 return boolean;
 
 	-- Update one element inserted in the dispersion table
 	procedure update (h : in out hash_table; k : in key; x : in item);
