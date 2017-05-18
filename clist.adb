@@ -37,100 +37,45 @@ package body clist is
 		return to_return;
 	end get_block;
 
-	-- Release a block introducing it into the list of free blocks
-	procedure release_block(to_release: in out index) is
-	begin
-		memory(to_release).next := free;
-		free := to_release; to_release := 0;
-	end release_block;
-
 	-- Inicializate the list to a empty list
 	procedure empty (l : out list) is
 	begin
-		l.first := null;
-		l.current := null;
+		l.first := 0;
 	end empty;
 
 	function is_empty (l : in list) return boolean is 
 	begin
-		return l.first = null;
+		return l.first = 0;
 	end is_empty;
-
-	--Get the last element in the list
-	function get_last (l : in list) return pcell is
-		p : pcell;
-	begin
-		p := l.first;
-		if p /= null then
-			while p.next /= null loop
-				p := p.next;
-			end loop;
-		end if;
-		return p;
-	end get_last;
 
 	--Insert a new element in last position
 	procedure insert (l : in out list; x : in item) is
-		p, paux : pcell;
+		p: index;
 	begin
-		p := new cell; 
-		p.x := x;
-		paux := get_last(l);
-		if paux = null then
-			l.first := p;
-			l.current := p;
-		else
-			paux.next := p;
-		end if;
+		p := get_block;
+		memory(p).next := l.first;
+		memory(p).x := x;
+		l.first := p;
 	exception
 		when storage_error => raise space_overflow;
 	end insert;
 
 	-- Check if the element is in the list
-	function is_found (l : in list; x : in item) return boolean is
-		paux : pcell;
-		found : boolean;
-	begin
-		found := false;
-		paux := l.first;
-		while paux /= null and not found loop
-			if paux.x = x then found := true; end if;
-			paux := paux.next;
-		end loop;
-		return found;
-	end is_found;
-
-	-- Advance de current pointer to next item.
-	procedure advance_pointer (l : out list) is
-	begin
-		l.current := l.current.next;
-	exception
-		when constraint_error => raise bad_use;
-	end advance_pointer;
-
-	-- Reset the value of the pointer
-	procedure reset_pointer (l : out list) is
-	begin
-		l.current := l.first;
-	exception 
-		when constraint_error => raise bad_use;
-	end reset_pointer;
-
-	-- Return a boolean depending on the value of the pointer
-	function current_is_empty (l : in list) return boolean is
-	begin
-		return l.current = null;
-	end current_is_empty;
-
-	-- Return the item pointed by the current pointer
-	function current_item (l : in list) return item is
-	begin
-		return l.current.x;
-	exception
-		when constraint_error => raise bad_use;
-	end current_item;
+	--function is_found (l : in list; x : in item) return boolean is
+	--	paux : pcell;
+	--	found : boolean;
+	--begin
+	--	found := false;
+	--	paux := l.first;
+	--	while paux /= null and not found loop
+	--		if paux.x = x then found := true; end if;
+	--		paux := paux.next;
+	--	end loop;
+	--	return found;
+	--end is_found;
 
 begin
+
 	prep_mem_space;
 
 end clist;
