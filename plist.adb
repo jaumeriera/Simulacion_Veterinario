@@ -41,18 +41,4 @@ package body plist is
 		when storage_error => raise space_overflow;
 	end insert;
 
-	-- Check if the element is in the list
-	function is_found (l : in list; x : in item) return boolean is
-		paux : pcell;
-		found : boolean;
-	begin
-		found := false;
-		paux := l.first;
-		while paux /= null and not found loop
-			if paux.x = x then found := true; end if;
-			paux := paux.next;
-		end loop;
-		return found;
-	end is_found;
-
 end plist;

@@ -1,6 +1,6 @@
 with exceptions; use exceptions;
 generic 
-	type item is (<>);
+	type item;
 package plist is
 	
 	type list is limited private;
@@ -15,9 +15,6 @@ package plist is
 	-- Return a boolean depending on the state of the list
 	function is_empty (l : in list) return boolean;
 	pragma inline(is_empty);
-
-	-- Return a boolean if the item is found in the list
-	function is_found (l : in list; x : in item) return boolean;
 	
 private
 
