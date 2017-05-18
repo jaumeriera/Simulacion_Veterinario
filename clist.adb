@@ -3,7 +3,7 @@ package body clist is
 	-- Definition of the information block
 	type block is
 		record
-			k: index;
+			k: integer;
 			x: item;
 			next: index;
 		end record;
@@ -60,19 +60,33 @@ package body clist is
 		when storage_error => raise space_overflow;
 	end insert;
 
-	-- Check if the element is in the list
-	--function is_found (l : in list; x : in item) return boolean is
-	--	paux : pcell;
-	--	found : boolean;
-	--begin
-	--	found := false;
-	--	paux := l.first;
-	--	while paux /= null and not found loop
-	--		if paux.x = x then found := true; end if;
-	--		paux := paux.next;
-	--	end loop;
-	--	return found;
-	--end is_found;
+	-- Iterator procedures and functions
+	
+	-- Put the index of the first element in the list into the iterator
+	procedure first (l : in list; it: out iterator) is
+	begin
+		it.i := l.first;
+	end first;
+
+	-- Put the index of the next element in the list into de iterator
+	procedure next (l : in list; it: out iterator) is
+	begin
+		it.i := memory(it.i).next;
+	end next;
+
+	-- Check if the iterator is valid
+	function is_valid (it : in iterator) is
+	begin
+		return it.i /= 0;
+	end is_valid;
+
+	-- Return the item in the iterator
+	procedure get (it : in iterator; k : out integer; x : out item) is
+	begin
+		if not is_valid(it) then raise bad_use; end if;
+		k := memory(it.i).k;
+		x := memory(it.i).x;
+	end get;
 
 begin
 
