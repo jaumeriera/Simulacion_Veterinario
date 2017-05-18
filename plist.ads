@@ -13,20 +13,20 @@ package plist is
 	procedure insert  (l : in out list; x : in item);
 
 	-- Advance the current pointer to next ilement on the list
-	procedure advance_pointer (l : out list);
-	pragma inline(advance_pointer);
+	--procedure advance_pointer (l : out list);
+	--pragma inline(advance_pointer);
 
 	-- Reset the value of the pointer
-	procedure reset_pointer (l : out list);
-	pragma inline(reset_pointer);
+	--procedure reset_pointer (l : out list);
+	--pragma inline(reset_pointer);
 
 	-- Return a boolean depending on the value of the pointer
-	function current_is_empty (l : in list) return boolean;
-	pragma inline(current_is_empty);
+	--function current_is_empty (l : in list) return boolean;
+	--pragma inline(current_is_empty);
 
 	-- Return the item pointed by the current pointer
-	function current_item (l : in list) return item;
-	pragma inline(current_item);
+	--function current_item (l : in list) return item;
+	--pragma inline(current_item);
 
 	-- Return a boolean depending on the state of the list
 	function is_empty (l : in list) return boolean;
@@ -49,7 +49,7 @@ private
 	type list is 
 		record
 			first : pcell;
-			current : pcell;
+	--		current : pcell;
 		end record;
 
 end plist;
