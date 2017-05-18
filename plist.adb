@@ -34,7 +34,6 @@ package body plist is
 		paux := get_last(l);
 		if paux = null then
 			l.first := p;
-			l.current := p;
 		else
 			paux.next := p;
 		end if;
@@ -55,35 +54,5 @@ package body plist is
 		end loop;
 		return found;
 	end is_found;
-
-	-- Advance de current pointer to next item.
-	procedure advance_pointer (l : out list) is
-	begin
-		l.current := l.current.next;
-	exception
-		when constraint_error => raise bad_use;
-	end advance_pointer;
-
-	-- Reset the value of the pointer
-	procedure reset_pointer (l : out list) is
-	begin
-		l.current := l.first;
-	exception 
-		when constraint_error => raise bad_use;
-	end reset_pointer;
-
-	-- Return a boolean depending on the value of the pointer
-	function current_is_empty (l : in list) return boolean is
-	begin
-		return l.current = null;
-	end current_is_empty;
-
-	-- Return the item pointed by the current pointer
-	function current_item (l : in list) return item is
-	begin
-		return l.current.x;
-	exception
-		when constraint_error => raise bad_use;
-	end current_item;
 
 end plist;
