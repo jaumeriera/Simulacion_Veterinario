@@ -60,7 +60,7 @@ package body clist is
 		when storage_error => raise space_overflow;
 	end insert;
 
-	-- Iterator procedures and functions
+	-- Iterator's procedures and functions
 	
 	-- Put the index of the first element in the list into the iterator
 	procedure first (l : in list; it: out iterator) is
