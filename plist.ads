@@ -1,9 +1,10 @@
 with exceptions; use exceptions;
 generic 
-	type item;
+	type item is private;
 package plist is
 	
 	type list is limited private;
+	type iterator is private;
 	
 	-- Prepare the list to empty list
 	procedure empty (l : out list);

@@ -4,7 +4,6 @@ package body plist is
 	procedure empty (l : out list) is
 	begin
 		l.first := null;
-		l.current := null;
 	end empty;
 
 	function is_empty (l : in list) return boolean is 
@@ -50,13 +49,13 @@ package body plist is
 	end first;
 
 	-- Put the pointer of the next element in the list into de iterator
-	procedure next (l : in list; it: out iterator) is
+	procedure next (l : in list; it: in out iterator) is
 	begin
 		it.pointer := it.pointer.next;
 	end next;
 
 	-- Check if the iterator is valid
-	function is_valid (it : in iterator) is
+	function is_valid (it : in iterator) return boolean is
 	begin
 		return it.pointer /= null;
 	end is_valid;
