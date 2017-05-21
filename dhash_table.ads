@@ -54,10 +54,12 @@ private
 			next : pnode;
 		end record;
 
-	subtype index is integer range 0..max_memory;
+	subtype cursor_index is integer range 0..max_memory;
+	type hash_index is natural range 0..size-1;
+
 	type key is new index range index'first..index'last;
 
-	type dispersion_table is array (natural range 0..size-1) of index;
+	type dispersion_table is array (hash_index) of cursor_index;
 	type a_of_lists is array (enum) of list;
 	type a_of_bool_by_enum is array (enum) of boolean;
 
