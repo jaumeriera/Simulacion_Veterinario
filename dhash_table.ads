@@ -1,14 +1,15 @@
+-- REVISAR TYPE KEY!!!
 with exceptions; use exceptions;
 generic
 
 	type enum is private;
-	type key is private;
 	type item is private;
 	with function hash(k: in key; b : in positive) return natural; 
-	size : positive := 151; -- Prime number
+	size : positive := 53; -- Prime number
 
 package dhash_table is
 
+	type key is private;
 	type dispersion_table is limited private;
 	type pnode is private;
 
@@ -39,28 +40,26 @@ package dhash_table is
 
 private 
 	
+	-- Constants with the size of the structures
 	b : constant natural := size;
+	max_memory : constant integer := 3*b;
 
-	type t_node is (extern, intern);
 	type node;
 	type pnode is access node;
 
+	-- Nodes for the list of record
 	type node (tn : t_node) is 
 		record 
-			case tn is
-				when intern =>
-					k : key;
-					x : item;
-					next_int : pnode;
-					first_ext : pnode;
-				when extern =>
-					x : enum;
-					next_ext : pnode;
-			end case;
+			visit : enum;
+			next : pnode;
 		end record;
 
-	type dispersion_table is array (natural range 0..size-1) of pnode;
+	subtype index is integer range 0..max_memory;
+	type key is new index range index'first..index'last;
+
+	type dispersion_table is array (natural range 0..size-1) of index;
 	type a_of_lists is array (enum) of list;
+	type a_of_bool_by_enum is array (enum) of boolean;
 
 	type hash_table is
 		record 
