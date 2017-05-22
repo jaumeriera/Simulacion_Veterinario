@@ -39,7 +39,7 @@ package body dhash_table is
 		free_block : cursor_index;
 	begin
 		if not avaible_memory then raise space_overflow; end if;
-		free_block := free; free := memory(free).next; 
+		free_block := free; free := memory(free).next;
 		memory(free_block).next := 0;
 		return free_block;
 	end get_block;
@@ -66,27 +66,37 @@ package body dhash_table is
 
 	procedure insert (h : in out hash_table; x : in item) is
 		hash_value : hash_index;
-		index : cursor_index;
 		index_aux : cursor_index;
 	begin
 		-- Get hash value and first block in the memory
-		hash_value := hash(x,b);
-		index := h.dt(hash_value);
-		index_aux := index;
+		hash_value := hash(x,hash_size);
 
-		-- Search if the item is in the hash table
-		while index_aux /= 0 and then memory(index_aux).x /= x loop
-			index_aux := memory(index_aux).next;
-		end loop;
-		if index_aux /= 0 then raise already_exists; end if;
+	if is_in(h,x) then raise already_exists; end if;
 
 		-- Get new block, allocate data in the block and reestructure indexes
 		index_aux := get_block;
 		init_block(index_aux, x);
-		memory(index_aux).next := index;
+		memory(index_aux).next := h.dt(hash_value);
 		h.dt(hash_value):=index_aux;
-		
+
 	end insert;
+
+	procedure is_in (h : in out hash_table; x : in item) return boolean is
+		hash_value : natural;
+		index : cursor_index;
+		index_aux : cursor_index;
+	begin
+		-- Get hash value
+		hash_value := hash(x,hash_size);
+		index := h.dt(hash_value);
+
+		-- Search if the item is in
+		while index /= 0 and then memory(index).x /= x loop
+			index := memory(index).next;
+		end loop;
+
+		return index /= 0;
+	end is_in;
 
 begin
 

@@ -4,7 +4,7 @@ generic
 
 	type enum is private;
 	type item is private;
-	with function hash(k: in key; b : in positive) return natural; 
+	with function hash(k: in key; b : in positive) return natural;
 	size : positive := 53; -- Prime number
 
 package dhash_table is
@@ -23,51 +23,47 @@ package dhash_table is
 	-- Insert new element into the dispersion table
 	procedure insert (h : in out hash_table; k : in key; x : in item);
 
-	-- Insert new extern node into an intern node 
-	procedure put_intern (h : in out hash_table; x : in item; 
-																   e : in enum);
+	-- Insert new extern node into an intern node
+	procedure put_intern (h : in out hash_table; x : in item; e : in enum);
 
 	-- Check if the item is in the dispersion table
-	function is_in (h : in out hash_table; k : in key; x : in item) 
-																 return boolean;
+	function is_in (h : in out hash_table; x : in item) return boolean;
 
 	-- Update one element inserted in the dispersion table
 	procedure update (h : in out hash_table; k : in key; x : in item);
 
-	-- Get the information of one element in the dispersion table by a key 
+	-- Get the information of one element in the dispersion table by a key
 	-- introducied by parameters
 	procedure get_item (h : in hash_table; k : in key; x : in item);
 
-private 
-	
+private
+
 	-- Constants with the size of the structures
 	hash_size : constant natural := size;
-	max_memory : constant integer := 3*b;
+	max_memory : constant integer := 3*hash_size;
 
 	type node;
 	type pnode is access node;
 
 	-- Nodes for the list of record
-	type node (tn : t_node) is 
-		record 
+	type node (tn : t_node) is
+		record
 			visit : enum;
 			next : pnode;
 		end record;
 
 	type cursor_index is integer range 0..max_memory;
-	type hash_index is natural range 0..hash_size-1;
 
-	type key is new index range index'first..index'last;
+	type key is new cursor_index range cursor_index'first..cursor_index'last;
 
-	type dispersion_table is array (hash_index) of cursor_index;
+	type dispersion_table is array (natural range 0..hash_size-1) of cursor_index;
 	type a_of_lists is array (enum) of list;
 	type a_of_bool_by_enum is array (enum) of boolean;
 
 	type hash_table is
-		record 
+		record
 			dt : dispersion_table;
 			lists : a_of_lists;
 		end record;
 
 end dhash_table;
-
