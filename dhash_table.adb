@@ -123,6 +123,7 @@ package body dhash_table is
 
 	end update;
 
+	-- Get the key of the item passed by arguments
 	function get_key (h : in hash_table; x : in item) return key is
 		hash_value : natural;
 		index, index_aux : cursor_index;

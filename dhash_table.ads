@@ -29,7 +29,7 @@ package dhash_table is
 	-- Update one element inserted in the dispersion table
 	procedure update (h : in out hash_table; x : in item; e : in enum);
 
-	-- Get the information of one element in the dispersion table by a key
+	-- Get the key of one element in the dispersion table by an item
 	-- introducied by parameters
 	function get_key (h : in hash_table; x : in item) return key;
 
