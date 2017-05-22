@@ -21,10 +21,10 @@ package dhash_table is
 	procedure empty (h : out hash_table);
 
 	-- Insert new element into the dispersion table
-	procedure put (h : in out hash_table; k : in key; x : in item);
+	procedure insert (h : in out hash_table; k : in key; x : in item);
 
 	-- Insert new extern node into an intern node 
-	procedure put_intern (h : in out hash_table; k : in key; x : in item; 
+	procedure put_intern (h : in out hash_table; x : in item; 
 																   e : in enum);
 
 	-- Check if the item is in the dispersion table
@@ -41,7 +41,7 @@ package dhash_table is
 private 
 	
 	-- Constants with the size of the structures
-	b : constant natural := size;
+	hash_size : constant natural := size;
 	max_memory : constant integer := 3*b;
 
 	type node;
@@ -54,8 +54,8 @@ private
 			next : pnode;
 		end record;
 
-	subtype cursor_index is integer range 0..max_memory;
-	type hash_index is natural range 0..size-1;
+	type cursor_index is integer range 0..max_memory;
+	type hash_index is natural range 0..hash_size-1;
 
 	type key is new index range index'first..index'last;
 
