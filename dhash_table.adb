@@ -105,7 +105,7 @@ package body dhash_table is
 		p : pnode;
 	begin
 		-- Check if the item is in the dispersion table
-		if not is_in(h,x) then raise does_not_found; end if;
+		if not is_in(h,x) then raise does_not_exist; end if;
 
 		-- Find the item in the dispersion table
 		element := get_key(h,x);
@@ -136,7 +136,7 @@ package body dhash_table is
 		while index /= 0 and then memory(index).x /= x loop
 			index := memory(index).next;
 		end loop;
-		if index = 0 then raise does_not_found;end if;
+	if index = 0 then raise does_not_exist;end if;
 
 		return memory(index).k;
 
