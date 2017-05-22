@@ -64,6 +64,7 @@ package body dhash_table is
 		end loop;
 	end empty;
 
+	-- Insert new element into the dispersion table
 	procedure insert (h : in out hash_table; x : in item) is
 		hash_value : hash_index;
 		index_aux : cursor_index;
@@ -81,6 +82,7 @@ package body dhash_table is
 
 	end insert;
 
+	-- Check if the item is in the hash table
 	procedure is_in (h : in out hash_table; x : in item) return boolean is
 		hash_value : natural;
 		index : cursor_index;
@@ -97,6 +99,30 @@ package body dhash_table is
 
 		return index /= 0;
 	end is_in;
+
+	-- Insert one visit into a record of the block
+	procedure update (h : in out hash_table; x : in item; e : in enum) is
+		element : key;
+		p : pnode;
+	begin
+		-- Check if the item is in the dispersion table
+		if not is_in(h,x) then raise does_not_found; end if;
+
+		-- Find the item in the dispersion table
+		element := get_key(h,x);
+
+		-- Check if this type of enum is in the visits done by this item
+		if memory(element).avisits(e) = false then
+			-- Udate array of booleans and insert into list
+			memory(element).avisits(e) := true;
+			insert(h.lists(e), element);
+		end if;
+
+		-- Create new node of record and update record
+		p := new node (e, memory(element).rec);
+		memory(element).rec := p;
+
+	end update;
 
 begin
 

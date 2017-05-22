@@ -21,20 +21,17 @@ package dhash_table is
 	procedure empty (h : out hash_table);
 
 	-- Insert new element into the dispersion table
-	procedure insert (h : in out hash_table; k : in key; x : in item);
-
-	-- Insert new extern node into an intern node
-	procedure put_intern (h : in out hash_table; x : in item; e : in enum);
+	procedure insert (h : in out hash_table; x : in item);
 
 	-- Check if the item is in the dispersion table
 	function is_in (h : in out hash_table; x : in item) return boolean;
 
 	-- Update one element inserted in the dispersion table
-	procedure update (h : in out hash_table; k : in key; x : in item);
+	procedure update (h : in out hash_table; x : in item; e : in enum);
 
 	-- Get the information of one element in the dispersion table by a key
 	-- introducied by parameters
-	procedure get_item (h : in hash_table; k : in key; x : in item);
+	function get_key (h : in hash_table; x : in item) return key;
 
 private
 
@@ -46,13 +43,13 @@ private
 	type pnode is access node;
 
 	-- Nodes for the list of record
-	type node (tn : t_node) is
+	type node is
 		record
 			visit : enum;
 			next : pnode;
 		end record;
 
-	type cursor_index is integer range 0..max_memory;
+	subtype cursor_index is integer range 0..max_memory;
 
 	type key is new cursor_index range cursor_index'first..cursor_index'last;
 
