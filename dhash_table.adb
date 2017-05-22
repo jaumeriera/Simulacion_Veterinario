@@ -60,7 +60,7 @@ package body dhash_table is
 			h.dt(i) := 0;
 		end loop;
 		for i in enum loop
-			h.lists := null;
+			empty(h.list(i));
 		end loop;
 	end empty;
 
@@ -86,7 +86,6 @@ package body dhash_table is
 	procedure is_in (h : in out hash_table; x : in item) return boolean is
 		hash_value : natural;
 		index : cursor_index;
-		index_aux : cursor_index;
 	begin
 		-- Get hash value
 		hash_value := hash(x,hash_size);
@@ -123,6 +122,24 @@ package body dhash_table is
 		memory(element).rec := p;
 
 	end update;
+
+	function get_key (h : in hash_table; x : in item) return key is
+		hash_value : natural;
+		index, index_aux : cursor_index;
+	begin
+		-- Get hash value and cursor index
+		hash_value := hash(x,hash_size);
+		index := h.dt(hash_value);
+
+		-- Search the item
+		while index /= 0 and then memory(index).x /= x loop
+			index := memory(index).next;
+		end loop;
+		if index = 0 then raise does_not_found;end if;
+
+		return memory(index).k;
+
+	end get_key;
 
 begin
 
