@@ -1,10 +1,9 @@
--- REVISAR TYPE KEY!!!
 with exceptions; use exceptions;
 generic
 
-	type enum is private;
+	type enum is (<>);
 	type item is private;
-	with function hash(k: in key; b : in positive) return natural;
+	with function hash(x: in item; b : in positive) return natural;
 	size : positive := 53; -- Prime number
 
 package dhash_table is
@@ -21,13 +20,13 @@ package dhash_table is
 	procedure empty (h : out hash_table);
 
 	-- Insert new element into the dispersion table
-	procedure insert (h : in out hash_table; x : in item);
+	procedure insert (h : in out hash_table; k : out key; x : in item);
 
 	-- Check if the item is in the dispersion table
 	function is_in (h : in out hash_table; x : in item) return boolean;
 
 	-- Update one element inserted in the dispersion table
-	procedure update (h : in out hash_table; x : in item; e : in enum);
+	procedure update (h : in out hash_table; k : in key; e : in enum);
 
 	-- Get the key of one element in the dispersion table by an item
 	-- introducied by parameters
@@ -49,9 +48,9 @@ private
 			next : pnode;
 		end record;
 
-	subtype cursor_index is integer range 0..max_memory;
+	type cursor_index is new integer range 0..max_memory;
 
-	type key is new cursor_index range cursor_index'first..cursor_index'last;
+	subtype key is cursor_index range cursor_index'first..cursor_index'last;
 
 	type dispersion_table is array (natural range 0..hash_size-1) of cursor_index;
 	type a_of_lists is array (enum) of list;

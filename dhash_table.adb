@@ -3,7 +3,6 @@ package body dhash_table is
 	type block is
 		record
 			x : item;
-			k : key;
 			avisits : a_of_bool_by_enum;
 			rec : pnode;
 			next : cursor_index;
@@ -21,10 +20,8 @@ package body dhash_table is
 	begin
 		for i in cursor_index in range 1..index'last-1 loop
 			memory(i).next := i+1;
-			memory(i).k := i;
 		end loop;
 		memory(index'last).next := 0;
-		memory(index'last).k := index'last;
 		free := 1;
 	end prep_mem_space;
 
@@ -56,7 +53,7 @@ package body dhash_table is
 	-- Prepare the structure to empty
 	procedure empty (h : out hash_table) is
 	begin
-		for i in hash_index loop
+		for i in hash_size loop
 			h.dt(i) := 0;
 		end loop;
 		for i in enum loop
@@ -65,20 +62,23 @@ package body dhash_table is
 	end empty;
 
 	-- Insert new element into the dispersion table
-	procedure insert (h : in out hash_table; x : in item) is
+	procedure insert (h : in out hash_table; k : out key; x : in item) is
 		hash_value : hash_index;
 		index_aux : cursor_index;
 	begin
 		-- Get hash value and first block in the memory
 		hash_value := hash(x,hash_size);
 
-	if is_in(h,x) then raise already_exists; end if;
+		if is_in(h,x) then raise already_exists; end if;
 
 		-- Get new block, allocate data in the block and reestructure indexes
 		index_aux := get_block;
 		init_block(index_aux, x);
 		memory(index_aux).next := h.dt(hash_value);
 		h.dt(hash_value):=index_aux;
+
+		-- Set the key
+		k := index_aux;
 
 	end insert;
 
@@ -100,21 +100,15 @@ package body dhash_table is
 	end is_in;
 
 	-- Insert one visit into a record of the block
-	procedure update (h : in out hash_table; x : in item; e : in enum) is
-		element : key;
+	procedure update (h : in out hash_table; k : in key; e : in enum) is
 		p : pnode;
 	begin
-		-- Check if the item is in the dispersion table
-		if not is_in(h,x) then raise does_not_exist; end if;
-
-		-- Find the item in the dispersion table
-		element := get_key(h,x);
 
 		-- Check if this type of enum is in the visits done by this item
-		if memory(element).avisits(e) = false then
+		if memory(k).avisits(e) = false then
 			-- Udate array of booleans and insert into list
-			memory(element).avisits(e) := true;
-			insert(h.lists(e), element);
+			memory(k).avisits(e) := true;
+			insert(h.lists(e), k);
 		end if;
 
 		-- Create new node of record and update record
@@ -136,9 +130,9 @@ package body dhash_table is
 		while index /= 0 and then memory(index).x /= x loop
 			index := memory(index).next;
 		end loop;
-	if index = 0 then raise does_not_exist;end if;
+		if index = 0 then raise does_not_exist;end if;
 
-		return memory(index).k;
+		return index;
 
 	end get_key;
 
