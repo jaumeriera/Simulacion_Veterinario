@@ -1,4 +1,5 @@
 with exceptions; use exceptions;
+with plist;
 generic
 
 	type enum is (<>);
@@ -13,7 +14,7 @@ package dhash_table is
 	type pnode is private;
 
 	-- List package
-	package pointerlist is new dlist (item => pnode);
+	package pointerlist is new plist (item => cursor_index);
 	use pointerlist;
 
 	-- Prepare the dispersion table to empty
@@ -23,7 +24,7 @@ package dhash_table is
 	procedure insert (h : in out hash_table; k : out key; x : in item);
 
 	-- Check if the item is in the dispersion table
-	function is_in (h : in out hash_table; x : in item) return boolean;
+	function is_in (h : in  hash_table; x : in item) return boolean;
 
 	-- Update one element inserted in the dispersion table
 	procedure update (h : in out hash_table; k : in key; e : in enum);
@@ -50,7 +51,7 @@ private
 
 	type cursor_index is new integer range 0..max_memory;
 
-	subtype key is cursor_index range cursor_index'first..cursor_index'last;
+	subtype key is cursor_index  (1..cursor_index'last);
 
 	type dispersion_table is array (natural range 0..hash_size-1) of cursor_index;
 	type a_of_lists is array (enum) of list;

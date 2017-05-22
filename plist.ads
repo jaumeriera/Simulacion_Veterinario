@@ -3,7 +3,7 @@ generic
 	type item is private;
 package plist is
 	
-	type list is limited private;
+	type list is private;
 	type iterator is private;
 	
 	-- Prepare the list to empty list
@@ -11,7 +11,7 @@ package plist is
 	pragma inline(empty);
 
 	-- Introduce item in the list
-	procedure insert  (l : in out list; x : in item);
+	procedure insert (l : in out list; x : in item);
 
 	-- Return a boolean depending on the state of the list
 	function is_empty (l : in list) return boolean;

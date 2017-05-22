@@ -8,20 +8,20 @@ package body dhash_table is
 			next : cursor_index;
 		end record;
 
-	type memory_space is array (index range 1..index'last) of block;
+	type memory_space is array (cursor_index range 1..cursor_index'last) of block;
 
 	memory: memory_space;
-	free : index;
+	free : cursor_index;
 
 	-- PROCEDURES AND FUNCTIONS RELATED TO IMPLEMENTATION WITH CURSORS
 
 	-- Prepare the array of blocks
 	procedure prep_mem_space is
 	begin
-		for i in cursor_index in range 1..index'last-1 loop
+		for i in cursor_index range 1..cursor_index'last-1 loop
 			memory(i).next := i+1;
 		end loop;
-		memory(index'last).next := 0;
+		memory(cursor_index'last).next := 0;
 		free := 1;
 	end prep_mem_space;
 
@@ -57,19 +57,19 @@ package body dhash_table is
 			h.dt(i) := 0;
 		end loop;
 		for i in enum loop
-			empty(h.list(i));
+			empty(h.lists(i));
 		end loop;
 	end empty;
 
 	-- Insert new element into the dispersion table
 	procedure insert (h : in out hash_table; k : out key; x : in item) is
-		hash_value : hash_index;
+		hash_value : natural;
 		index_aux : cursor_index;
 	begin
 		-- Get hash value and first block in the memory
 		hash_value := hash(x,hash_size);
 
-		if is_in(h,x) then raise already_exists; end if;
+		if is_in(h,x) then raise already_exist; end if;
 
 		-- Get new block, allocate data in the block and reestructure indexes
 		index_aux := get_block;
@@ -83,7 +83,7 @@ package body dhash_table is
 	end insert;
 
 	-- Check if the item is in the hash table
-	procedure is_in (h : in out hash_table; x : in item) return boolean is
+	function is_in (h : in  hash_table; x : in item) return boolean is
 		hash_value : natural;
 		index : cursor_index;
 	begin
@@ -102,18 +102,23 @@ package body dhash_table is
 	-- Insert one visit into a record of the block
 	procedure update (h : in out hash_table; k : in key; e : in enum) is
 		p : pnode;
+		l : list;
 	begin
 
 		-- Check if this type of enum is in the visits done by this item
 		if memory(k).avisits(e) = false then
 			-- Udate array of booleans and insert into list
 			memory(k).avisits(e) := true;
-			insert(h.lists(e), k);
+			l := h.lists(e);
+			pointerlist.insert(l, k);
 		end if;
 
 		-- Create new node of record and update record
-		p := new node (e, memory(element).rec);
-		memory(element).rec := p;
+		p := new node;
+		p.visit := e;
+		p.next := memory(k).rec;
+
+		memory(k).rec := p;
 
 	end update;
 
@@ -121,6 +126,7 @@ package body dhash_table is
 	function get_key (h : in hash_table; x : in item) return key is
 		hash_value : natural;
 		index, index_aux : cursor_index;
+		k : key;
 	begin
 		-- Get hash value and cursor index
 		hash_value := hash(x,hash_size);
@@ -132,7 +138,9 @@ package body dhash_table is
 		end loop;
 		if index = 0 then raise does_not_exist;end if;
 
-		return index;
+		k := index;
+
+		return k;
 
 	end get_key;
 
