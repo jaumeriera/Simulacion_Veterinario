@@ -46,7 +46,9 @@ package body dhash_table is
 
 	procedure init_block (i : in cursor_index; x : in item) is
 	begin
-
+		memory(i).x := x;
+		memory(i).avisits := (others => false);
+		memory(i).rec := null;
 	end init_block;
 
 	-- PROCEDURES AND FUNCTIONS OF SET
