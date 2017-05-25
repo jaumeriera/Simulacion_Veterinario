@@ -53,7 +53,7 @@ package body dhash_table is
 	-- Prepare the structure to empty
 	procedure empty (h : out hash_table) is
 	begin
-		for i in hash_size loop
+		for i in 0..hash_size-1 loop
 			h.dt(i) := 0;
 		end loop;
 		for i in enum loop

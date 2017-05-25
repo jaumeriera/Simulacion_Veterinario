@@ -9,7 +9,9 @@ generic
 
 package dhash_table is
 
-	type key is private;
+	--type key is private;
+	--subtype key is natural range 0..3*size;
+	type key is new integer range 0..3*size;
 	type hash_table is limited private;
 	type pnode is private;
 
@@ -48,8 +50,6 @@ private
 			visit : enum;
 			next : pnode;
 		end record;
-
-	type key is new integer range 0..max_memory;
 
 	-- List package
 	package pointerlist is new plist (item => key);
