@@ -5,23 +5,23 @@ package body dhash_table is
 			x : item;
 			avisits : a_of_bool_by_enum;
 			rec : pnode;
-			next : cursor_index;
+			next : key;
 		end record;
 
-	type memory_space is array (cursor_index range 1..cursor_index'last) of block;
+	type memory_space is array (key range 1..key'last) of block;
 
 	memory: memory_space;
-	free : cursor_index;
+	free : key;
 
 	-- PROCEDURES AND FUNCTIONS RELATED TO IMPLEMENTATION WITH CURSORS
 
 	-- Prepare the array of blocks
 	procedure prep_mem_space is
 	begin
-		for i in cursor_index range 1..cursor_index'last-1 loop
+		for i in key range 1..key'last-1 loop
 			memory(i).next := i+1;
 		end loop;
-		memory(cursor_index'last).next := 0;
+		memory(key'last).next := 0;
 		free := 1;
 	end prep_mem_space;
 
@@ -31,9 +31,9 @@ package body dhash_table is
 		return free /= 0;
 	end avaible_memory;
 
-	-- Return a free cursor_index
-	function get_block return cursor_index is
-		free_block : cursor_index;
+	-- Return a free key
+	function get_block return key is
+		free_block : key;
 	begin
 		if not avaible_memory then raise space_overflow; end if;
 		free_block := free; free := memory(free).next;
@@ -41,7 +41,7 @@ package body dhash_table is
 		return free_block;
 	end get_block;
 
-	procedure init_block (i : in cursor_index; x : in item) is
+	procedure init_block (i : in key; x : in item) is
 	begin
 		memory(i).x := x;
 		memory(i).avisits := (others => false);
@@ -64,7 +64,7 @@ package body dhash_table is
 	-- Insert new element into the dispersion table
 	procedure insert (h : in out hash_table; k : out key; x : in item) is
 		hash_value : natural;
-		index_aux : cursor_index;
+		index_aux : key;
 	begin
 		-- Get hash value and first block in the memory
 		hash_value := hash(x,hash_size);
@@ -85,7 +85,7 @@ package body dhash_table is
 	-- Check if the item is in the hash table
 	function is_in (h : in  hash_table; x : in item) return boolean is
 		hash_value : natural;
-		index : cursor_index;
+		index : key;
 	begin
 		-- Get hash value
 		hash_value := hash(x,hash_size);
@@ -125,8 +125,7 @@ package body dhash_table is
 	-- Get the key of the item passed by arguments
 	function get_key (h : in hash_table; x : in item) return key is
 		hash_value : natural;
-		index, index_aux : cursor_index;
-		k : key;
+		index : key;
 	begin
 		-- Get hash value and cursor index
 		hash_value := hash(x,hash_size);
@@ -138,9 +137,7 @@ package body dhash_table is
 		end loop;
 		if index = 0 then raise does_not_exist;end if;
 
-		k := index;
-
-		return k;
+		return index;
 
 	end get_key;
 

@@ -10,12 +10,8 @@ generic
 package dhash_table is
 
 	type key is private;
-	type dispersion_table is limited private;
+	type hash_table is limited private;
 	type pnode is private;
-
-	-- List package
-	package pointerlist is new plist (item => cursor_index);
-	use pointerlist;
 
 	-- Prepare the dispersion table to empty
 	procedure empty (h : out hash_table);
@@ -49,11 +45,13 @@ private
 			next : pnode;
 		end record;
 
-	type cursor_index is new integer range 0..max_memory;
+	type key is new integer range 0..max_memory;
 
-	subtype key is cursor_index  (1..cursor_index'last);
+	-- List package
+	package pointerlist is new plist (item => key);
+	use pointerlist;
 
-	type dispersion_table is array (natural range 0..hash_size-1) of cursor_index;
+	type dispersion_table is array (natural range 0..hash_size-1) of key;
 	type a_of_lists is array (enum) of list;
 	type a_of_bool_by_enum is array (enum) of boolean;
 

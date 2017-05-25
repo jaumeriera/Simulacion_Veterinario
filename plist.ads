@@ -1,11 +1,11 @@
 with exceptions; use exceptions;
-generic 
+generic
 	type item is private;
 package plist is
-	
+
 	type list is private;
 	type iterator is private;
-	
+
 	-- Prepare the list to empty list
 	procedure empty (l : out list);
 	pragma inline(empty);
@@ -18,7 +18,7 @@ package plist is
 	pragma inline(is_empty);
 
 	-- Procedures and functions of the iterator
-	
+
 	-- Put in the iterator the pointer wich points to first element
 	procedure first (l : in list; it : out iterator);
 	pragma inline(first);
@@ -31,7 +31,7 @@ package plist is
 	function is_valid (it : in iterator) return boolean;
 	pragma inline(is_valid);
 
-	-- Put the item into the actual iterator into an item introduced by 
+	-- Put the item into the actual iterator into an item introduced by
 	-- arguments
 	procedure get(it : in iterator; x : out item);
 	pragma inline(get);
@@ -47,7 +47,7 @@ private
 			next : pcell;
 		end record;
 
-	type list is 
+	type list is
 		record
 			first : pcell;
 		end record;
