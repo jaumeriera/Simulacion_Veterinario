@@ -29,6 +29,10 @@ package dhash_table is
 	-- introducied by parameters
 	function get_key (h : in hash_table; x : in item) return key;
 
+	-- Get the item related to the key
+	function get_item (h : in hash_table; k : in key) return item;
+	pragma inline(get_item);
+
 private
 
 	-- Constants with the size of the structures
