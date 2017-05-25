@@ -57,7 +57,7 @@ package body dhash_table is
 			h.dt(i) := 0;
 		end loop;
 		for i in enum loop
-			empty(h.lists(i));
+			empty(h.lists(i).key_list);
 		end loop;
 	end empty;
 
@@ -105,11 +105,14 @@ package body dhash_table is
 		l : list;
 	begin
 
+		-- Increment the counter of elements ofthe enum
+		h.lists(e).component_number := h.lists(e).component_number+1;
+
 		-- Check if this type of enum is in the visits done by this item
 		if memory(k).avisits(e) = false then
 			-- Udate array of booleans and insert into list
 			memory(k).avisits(e) := true;
-			l := h.lists(e);
+			l := h.lists(e).key_list;
 			pointerlist.insert(l, k);
 		end if;
 
@@ -146,6 +149,32 @@ package body dhash_table is
 	begin
 		return memory(k).x;
 	end get_item;
+
+	procedure show_components_by_enum (h : in hash_table; e : in enum) is
+		actual_list : list renames h.lists(e).key_list;
+		iterator : list_iterator;
+		k : key;
+	begin
+		-- Information about number of visits of our enum
+		put("Numero de visitas del tipo ");
+		put(e);
+		put(" es de : ");
+		put(h.lists(e).component_number);
+		put_line("");
+
+		-- Print the name of our list components
+		put_line("Los nombre de los animales que han pasado por estas visitas son: ");
+
+		-- Visit all the elements in the list and print them
+		first(actual_list, iterator);
+		while is_valid(iterator) loop
+			get(it, k);
+			put_line(to_string(memory(k).x));
+			next(actual_list, iterator);
+		end loop;
+
+
+	end show_components_by_enum;
 
 begin
 

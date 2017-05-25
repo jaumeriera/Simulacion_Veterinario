@@ -1,0 +1,22 @@
+V "GNAT Lib v4.6"
+P ZX
+R nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnvnnnnnnnnnnnnnnnnnnvnnnnnnnnnnnnnnnn
+
+U exceptions%s		exceptions.ads		8eddeac6 EE OO PK IL
+W system%s		system.ads		system.ali
+W system.exception_table%s  s-exctab.adb	s-exctab.ali
+W system.standard_library%s  s-stalib.adb	s-stalib.ali
+
+D ada.ads		20070406091342 3ffc8e18
+D a-unccon.ads		20070406091342 f9eb8f06
+D exceptions.ads	20170522111546 8eddeac6
+D system.ads		20140416172229 23e1f70b
+D s-exctab.ads		20090417131547 66e51330
+D s-stalib.ads		20101021102512 c4241c00
+X 3 exceptions.ads
+1K9*exceptions 8l5 8e15
+3X9*bad_use
+4X9*space_overflow
+5X9*already_exist
+6X9*does_not_exist
+

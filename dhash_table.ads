@@ -1,10 +1,12 @@
 with exceptions; use exceptions;
+with ada.text_io;
 with plist;
 generic
 
 	type enum is (<>);
 	type item is private;
 	with function hash(x: in item; b : in positive) return natural;
+	with function to_string(x : in item) return string;
 	size : positive := 53; -- Prime number
 
 package dhash_table is
@@ -35,7 +37,18 @@ package dhash_table is
 	function get_item (h : in hash_table; k : in key) return item;
 	pragma inline(get_item);
 
+	-- Print the items in the list of keys indexed by enum
+	procedure show_components_by_enum (h : in hash_table; k : in key);
+
 private
+
+	-- List package
+	package pointerlist is new plist (item => key);
+	use pointerlist;
+	-- To print enumeration type
+	package t_enum_io is new ada.text_io.enumeration_io(enum);
+	use t_enum_io;
+
 
 	-- Constants with the size of the structures
 	hash_size : constant natural := size;
@@ -51,12 +64,15 @@ private
 			next : pnode;
 		end record;
 
-	-- List package
-	package pointerlist is new plist (item => key);
-	use pointerlist;
+	-- Components of the array wich have the keys list
+	type component is
+		record
+			key_list : list;
+			component_number : integer;
+		end record;
 
 	type dispersion_table is array (natural range 0..hash_size-1) of key;
-	type a_of_lists is array (enum) of list;
+	type a_of_lists is array (enum) of component;
 	type a_of_bool_by_enum is array (enum) of boolean;
 
 	type hash_table is
