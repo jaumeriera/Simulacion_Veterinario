@@ -141,6 +141,12 @@ package body dhash_table is
 
 	end get_key;
 
+	-- Return the item related to one key
+	function get_item (h : in hash_table; k : in key) return item is
+	begin
+		return memory(k).x;
+	end get_item;
+
 begin
 
 	prep_mem_space;
