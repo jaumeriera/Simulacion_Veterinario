@@ -44,6 +44,8 @@ package dhash_table is
 	-- FUNCTIONS AND PROCEDURES RELATED TO HASH_ITERATOR --
 	-------------------------------------------------------
 
+	type hash_iterator is private;
+
 	-- Put in the hash_iterator the pointer wich points to first element of the
 	-- list indexed by the enum
 	procedure first (h : in hash_table; it : out hash_iterator; e : in enum);
@@ -55,13 +57,12 @@ package dhash_table is
 	pragma inline(next);
 
 	-- Check if the actual hash_iterator is valid
-	function is_valid (it : in hash_iterator);
+	function is_valid (it : in hash_iterator) return boolean;
 	pragma inline(is_valid);
 
 	-- Put the item into the actual hash_iterator into and item introduced by
 	-- arguments
-	procedure get (it : in hash_iterator; x : out item);
-	pragma inline(get);
+	procedure get (h : in hash_table; it : in hash_iterator; x : out item);
 
 
 private

@@ -187,10 +187,32 @@ package body dhash_table is
 
 	-- Get the first element of the list indexed by enum
 	procedure first (h : in hash_table; it : out hash_iterator; e : in enum) is
+		elist : list renames h.lists(e).key_list;
 	begin
-		first(h.lists(e), it.lit);
+		pointerlist.first(elist, it.lit);
 		it.visit := e;
 	end first;
+
+	-- Put the next element in the list indexed by enum in the hash_iterator
+	procedure next (h : in hash_table; it : in out hash_iterator) is
+		elist : list renames h.lists(it.visit).key_list;
+	begin
+		pointerlist.next(elist, it.lit);
+	end next;
+
+	-- Check if the has_iterator is valid
+	function is_valid (it : in hash_iterator) return boolean is
+	begin
+		return pointerlist.is_valid(it.lit);
+	end is_valid;
+
+	-- Put into the item argument the actual item pointed by the has_iterator
+	procedure get (h : in hash_table; it : in hash_iterator; x : out item) is
+		k : key;
+	begin
+		pointerlist.get(it.lit, k);
+		x := memory(k).x;
+	end get;
 
 
 begin

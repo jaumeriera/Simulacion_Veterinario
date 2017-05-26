@@ -4,7 +4,7 @@ generic
 package plist is
 
 	type list is private;
-	type list_list_iterator is private;
+	type list_iterator is private;
 
 	-- Prepare the list to empty list
 	procedure empty (l : out list);
