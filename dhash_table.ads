@@ -1,5 +1,5 @@
 with exceptions; use exceptions;
-with ada.text_io;
+with ada.text_io; use ada.text_io;
 with plist;
 generic
 
@@ -36,6 +36,9 @@ package dhash_table is
 	-- Get the item related to the key
 	function get_item (h : in hash_table; k : in key) return item;
 	pragma inline(get_item);
+
+	-- Return the component_number of the list indexed by enum
+	function get_component_number (h : in hash_table; e : in enum) return integer;
 
 	-- Print the items in the list of keys indexed by enum
 	--procedure show_components_by_enum (h : in hash_table; k : in key);

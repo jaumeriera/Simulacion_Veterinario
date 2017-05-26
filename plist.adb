@@ -26,16 +26,12 @@ package body plist is
 
 	--Insert a new element in last position
 	procedure insert (l : in out list; x : in item) is
-		p, paux : pcell;
+		p : pcell;
 	begin
 		p := new cell;
 		p.x := x;
-		paux := get_last(l);
-		if paux = null then
-			l.first := p;
-		else
-			paux.next := p;
-		end if;
+		p.next := l.first;
+		l.first := p;
 	exception
 		when storage_error => raise space_overflow;
 	end insert;

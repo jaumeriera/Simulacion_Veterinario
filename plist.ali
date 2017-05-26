@@ -1,0 +1,87 @@
+V "GNAT Lib v4.6"
+P SS ZX
+R nnnvnnnnnnnnnnnnnnvnnvnnnvnnnnnvnnnnnnnnnnnnnnnnnnnnnnnnnnvnnnnnnnnnnnnnnnnnnnnn
+
+U plist%b		plist.adb		2bc494e4 NE OO PK GE IL
+
+U plist%s		plist.ads		584d4db8 BN EE NE OO PK GE IL
+W ada%s			ada.ads			ada.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W exceptions%s		exceptions.ads		exceptions.ali
+
+D ada.ads		20070406091342 3ffc8e18
+D a-except.ads		20090727140100 0c711ac9
+D a-finali.ads		20090409150019 e5e85fa4
+D a-filico.ads		20090409150019 872dc219
+D a-ioexce.ads		20091130110856 8b9de6cd
+D a-stream.ads		20090409150019 2ca4ee37
+D a-tags.ads		20101021101406 c7695348
+D a-textio.ads		20091028140912 386df5d4
+D a-unccon.ads		20070406091342 f9eb8f06
+D exceptions.ads	20170522111546 8eddeac6
+D interfac.ads		20090409150019 f77d8799
+D i-cstrea.ads		20100622165701 1bd72c32
+D plist.ads		20170526110026 eefd52aa
+D plist.adb		20170526110724 c539c64e
+D system.ads		20140416172229 23e1f70b
+D s-crtl.ads		20100617122610 ac77b159
+D s-exctab.ads		20090417131547 66e51330
+D s-ficobl.ads		20100909103250 443b9d66
+D s-finimp.ads		20090409150019 46853fe8
+D s-finroo.ads		20090409150019 dbb860c9
+D s-parame.ads		20091130110856 9c5d83fa
+D s-secsta.ads		20090707124243 eea35a36
+D s-soflin.ads		20090729085153 9414c974
+D s-stache.ads		20090417130712 596fc1b4
+D s-stalib.ads		20101021102512 c4241c00
+D s-stoele.ads		20090417130712 facd7d98
+D s-stoele.adb		20100617152355 afc5dc80
+D s-stratt.ads		20100909123135 aedef97e
+D s-traent.ads		20090417130712 5221ee41
+D s-unstyp.ads		20090409150019 6ae15c76
+D s-wchcon.ads		20090417130712 bfeb2e3d
+X 1 ada.ads
+16K9*Ada 19e8 13|2r6 2r23
+X 8 a-textio.ads
+49K13*Text_IO 472e16 13|2w10 2r27
+X 10 exceptions.ads
+1K9*exceptions 8e15 13|1w6 1r22
+3X9*bad_use 14|64r48
+4X9*space_overflow 14|36r45
+X 13 plist.ads
+4+14 item 15r51 39r54 49r29 14|28r51 62r55
+5k9*plist 4z14 63l5 63e10 14|1b14 68l5 68t10
+7R14*list 11r34 15r38 18r35 26r33 30r32 53c14 56e27 14|4r34 9r35 15r35 28r38
+. 44r33 50r32
+8R14*list_iterator 26r48 30r50 34r36 39r31 58c14 61e27 14|44r47 50r49 56r36
+. 62r32
+11U19*empty 11<26 12r23 14|4b19 7l13 7t18
+11r26 l{7R14} 14|4b26 6m17
+15U19*insert 15=27 15>44 14|28b19 37l13 37t19
+15r27 l{7R14} 14|28b27 33r27 34m17
+15*44 x{4+14} 14|28b44 32r24
+18V18*is_empty{boolean} 18>28 19r23 14|9b18 12l13 12t21
+18r28 l{7R14} 14|9b28 11r24
+26U19*first 26>26 26<39 27r23 14|44b19 47l13 47t18
+26r26 l{7R14} 14|44b26 46r31
+26r39 it{8R14} 14|44b39 46m17
+30U19*next 30>25 30=38 31r23 14|50b19 53l13 53t17
+30r25 l{7R14} 14|50b25
+30r38 it{8R14} 14|50b38 52m17 52r31
+34V18*is_valid{boolean} 34>28 35r23 14|56b18 59l13 59t21 64s24
+34r28 it{8R14} 14|56b28 58r24
+39U19*get 39>23 39<46 14|62b19 66l13 66t16
+39r23 it{8R14} 14|62b24 64r33 65r22
+39*46 x{4+14} 14|62b47 65m17
+44R14 cell 45r30 47c14 51e27 14|31r26
+45P14 pcell(44R14) 50r32 55r33 60r35 14|15r48 16r21 29r21
+49*25 x{4+14} 14|32m19 65r33
+50p25 next{45P14} 14|20r33 21r40 33m19 52r42
+55p25 first{45P14} 14|6m19 11r26 18r24 33r29 34m19 46r33
+60p25 pointer{45P14} 14|46m20 52m20 52r33 52r34 58r27 65r24 65r25
+X 14 plist.adb
+15V18 get_last{13|45P14} 15b18 15>28 25l13 25t21
+15r28 l{13|7R14} 18r22
+16p17 p{13|45P14} 18m17 19r20 20r31 21m33 21r38 24r24
+29p17 p{13|45P14} 31m17 32m17 33m17 34r28
+

@@ -62,6 +62,7 @@ package body dhash_table is
 		end loop;
 		for i in enum loop
 			empty(h.lists(i).key_list);
+			h.lists(i).component_number := 0;
 		end loop;
 	end empty;
 
@@ -106,7 +107,6 @@ package body dhash_table is
 	-- Insert one visit into a record of the block
 	procedure update (h : in out hash_table; k : in key; e : in enum) is
 		p : pnode;
-		l : list;
 	begin
 
 		-- Increment the counter of elements ofthe enum
@@ -116,8 +116,7 @@ package body dhash_table is
 		if memory(k).avisits(e) = false then
 			-- Udate array of booleans and insert into list
 			memory(k).avisits(e) := true;
-			l := h.lists(e).key_list;
-			pointerlist.insert(l, k);
+			pointerlist.insert(h.lists(e).key_list, k);
 		end if;
 
 		-- Create new node of record and update record
@@ -181,6 +180,13 @@ package body dhash_table is
 
 	--end show_components_by_enum;
 
+	-- Return the component_number of the list indexed by enum
+	function get_component_number (h : in hash_table; e : in enum) return integer is
+		my_component : component renames h.lists(e);
+	begin
+		return my_component.component_number;
+	end get_component_number;
+
 	-------------------------------------------------------
 	-- FUCNTIONS AND PROCEDURES RELATED TO HASH_ITERATOR --
 	-------------------------------------------------------
@@ -188,8 +194,9 @@ package body dhash_table is
 	-- Get the first element of the list indexed by enum
 	procedure first (h : in hash_table; it : out hash_iterator; e : in enum) is
 		elist : list renames h.lists(e).key_list;
+		it_list : list_iterator renames it.lit;
 	begin
-		pointerlist.first(elist, it.lit);
+		pointerlist.first(elist, it_list);
 		it.visit := e;
 	end first;
 
@@ -211,7 +218,7 @@ package body dhash_table is
 		k : key;
 	begin
 		pointerlist.get(it.lit, k);
-		x := memory(k).x;
+		x := get_item(h,k);
 	end get;
 
 

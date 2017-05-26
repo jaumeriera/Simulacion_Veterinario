@@ -1,4 +1,5 @@
 with exceptions; use exceptions;
+with ada.text_io; use ada.text_io;
 generic
 	type item is private;
 package plist is

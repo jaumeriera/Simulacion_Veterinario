@@ -1,5 +1,6 @@
 with dhash_table;
 with ada.text_io; use ada.text_io;
+with ada.integer_text_io; use ada.integer_text_io;
 with ada.strings; use ada.strings;
 procedure prueba_hashing is
 
@@ -40,20 +41,8 @@ procedure prueba_hashing is
 
   subtype string20 is string (1..20);
 
-  function to_string (my_string : in string20) return string is
-    to_return : string(1..20);
-  begin
-
-    for i in integer range 1..20 loop
-      to_return(i) := my_string(i);
-    end loop;
-
-    return to_return;
-
-  end to_string;
-
   package animal_hash is new dhash_table (enum => t_enum, item => string20,
-                      hash => prueba_hashing.hash, prueba_hashing.to_string);
+                                                    hash => prueba_hashing.hash);
   use animal_hash;
 
   my_hash : hash_table;
@@ -67,6 +56,29 @@ procedure prueba_hashing is
       my_string(index) := standar_string(index);
     end loop;
   end to_my_string;
+
+  procedure show_animals_by_visit (my_hash : in hash_table; visit : t_enum) is
+    iterator : hash_iterator;
+    pet : string20;
+  begin
+    put_line("");
+    put("Para el tipo de visita ");
+    put(visit);
+    put_line(" :");
+    put(" - Ha habido un total de ");
+    put(get_component_number(my_hash, visit));
+    put_line("");
+    put_line(" - Los animales que han pasado por este tipo de visita son: ");
+
+    first(my_hash, iterator, visit);
+    while is_valid(iterator) loop
+      put("   - ");
+      get(my_hash, iterator, pet);
+      put_line(pet);
+      next(my_hash, iterator);
+    end loop;
+
+  end show_animals_by_visit;
 
   o1, o2, o3, o4 : string20;
   n1, n2, n3, n4 : string20;
@@ -86,6 +98,7 @@ begin
 
   update(my_hash, ky, cures);
   update(my_hash, ky, emergencies);
+  update(my_hash, ky, emergencies);
   update(my_hash, kt, revisions);
   update(my_hash, kr, emergencies);
   update(my_hash, kr, revisions);
@@ -95,12 +108,11 @@ begin
   n3 := get_item(my_hash,kr);
   n4 := get_item(my_hash,kd);
 
-  put("Nombres de mascotasen la tabla:");
-  put(n1);
-  put(n2);
-  put(n3);
-  put(n4);
+  put_line("Nombres de mascotasen la tabla:");
+  put_line(n1);
+  put_line(n2);
+  put_line(n3);
+  put_line(n4);
 
-  put(e);
-
+  show_animals_by_visit(my_hash, emergencies);
 end prueba_hashing;
