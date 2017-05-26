@@ -13,6 +13,7 @@ package body dheap is
   function get_last (q : in heap) is
   begin
     if is_empty(q) then raise bad_use; end if;
+    return q.memory(1);
   end get_last;
 
 
