@@ -40,7 +40,9 @@ package body plist is
 		when storage_error => raise space_overflow;
 	end insert;
 
-	-- list_iterator's procedures and fucntions
+	----------------------------------------------
+	-- LIST_ITERATOR'S PROCEDURES AND FUNCTIONS --
+	----------------------------------------------
 
 	-- list_iterator's pointer point to first element of the list
 	procedure first (l : in list; it: out list_iterator) is

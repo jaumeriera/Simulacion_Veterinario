@@ -17,7 +17,9 @@ package plist is
 	function is_empty (l : in list) return boolean;
 	pragma inline(is_empty);
 
-	-- Procedures and functions of the list_iterator
+	-------------------------------------------------------
+	-- PROCEDURES AND FUNCTIONS RELATED TO LIST_ITERATOR --
+	-------------------------------------------------------
 
 	-- Put in the list_iterator the pointer wich points to first element
 	procedure first (l : in list; it : out list_iterator);

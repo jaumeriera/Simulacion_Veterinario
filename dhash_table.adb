@@ -13,7 +13,9 @@ package body dhash_table is
 	memory: memory_space;
 	free : key;
 
-	-- PROCEDURES AND FUNCTIONS RELATED TO IMPLEMENTATION WITH CURSORS
+	---------------------------------------------------------------------
+	-- PROCEDURES AND FUNCTIONS RELATED TO IMPLEMENTATION WITH CURSORS --
+	---------------------------------------------------------------------
 
 	-- Prepare the array of blocks
 	procedure prep_mem_space is
@@ -48,7 +50,9 @@ package body dhash_table is
 		memory(i).rec := null;
 	end init_block;
 
-	-- PROCEDURES AND FUNCTIONS OF SET
+	-------------------------------------
+	-- PROCEDURES AND FUNCTIONS OF SET --
+	-------------------------------------
 
 	-- Prepare the structure to empty
 	procedure empty (h : out hash_table) is
@@ -144,37 +148,50 @@ package body dhash_table is
 
 	end get_key;
 
+
 	-- Return the item related to one key
 	function get_item (h : in hash_table; k : in key) return item is
 	begin
 		return memory(k).x;
 	end get_item;
 
-	procedure show_components_by_enum (h : in hash_table; e : in enum) is
-		actual_list : list renames h.lists(e).key_list;
-		iterator : list_iterator;
-		k : key;
-	begin
+	--procedure show_components_by_enum (h : in hash_table; e : in enum) is
+	--	actual_list : list renames h.lists(e).key_list;
+	--	iterator : list_iterator;
+	--	k : key;
+--begin
 		-- Information about number of visits of our enum
-		put("Numero de visitas del tipo ");
-		put(e);
-		put(" es de : ");
-		put(h.lists(e).component_number);
-		put_line("");
+	-- put("Numero de visitas del tipo ");
+	-- put(e);
+	--	put(" es de : ");
+	--	put(h.lists(e).component_number);
+	--	put_line("");
 
 		-- Print the name of our list components
-		put_line("Los nombre de los animales que han pasado por estas visitas son: ");
+	--	put_line("Los nombre de los animales que han pasado por estas visitas son: ");
 
 		-- Visit all the elements in the list and print them
-		first(actual_list, iterator);
-		while is_valid(iterator) loop
-			get(it, k);
-			put_line(to_string(memory(k).x));
-			next(actual_list, iterator);
-		end loop;
+		--first(actual_list, iterator);
+		--while is_valid(iterator) loop
+			--get(it, k);
+			--put_line(to_string(memory(k).x));
+			--next(actual_list, iterator);
+		--end loop;
 
 
-	end show_components_by_enum;
+	--end show_components_by_enum;
+
+	-------------------------------------------------------
+	-- FUCNTIONS AND PROCEDURES RELATED TO HASH_ITERATOR --
+	-------------------------------------------------------
+
+	-- Get the first element of the list indexed by enum
+	procedure first (h : in hash_table; it : out hash_iterator; e : in enum) is
+	begin
+		first(h.lists(e), it.lit);
+		it.visit := e;
+	end first;
+
 
 begin
 

@@ -6,7 +6,7 @@ generic
 	type enum is (<>);
 	type item is private;
 	with function hash(x: in item; b : in positive) return natural;
-	with function to_string(x : in item) return string;
+	--with function to_string(x : in item) return string;
 	size : positive := 53; -- Prime number
 
 package dhash_table is
@@ -38,7 +38,31 @@ package dhash_table is
 	pragma inline(get_item);
 
 	-- Print the items in the list of keys indexed by enum
-	procedure show_components_by_enum (h : in hash_table; k : in key);
+	--procedure show_components_by_enum (h : in hash_table; k : in key);
+
+	-------------------------------------------------------
+	-- FUNCTIONS AND PROCEDURES RELATED TO HASH_ITERATOR --
+	-------------------------------------------------------
+
+	-- Put in the hash_iterator the pointer wich points to first element of the
+	-- list indexed by the enum
+	procedure first (h : in hash_table; it : out hash_iterator; e : in enum);
+	pragma inline(first);
+
+	-- Put in the hash_iterator the succesor element. Important: variable enum
+	-- don't change with this procedure
+	procedure next (h : in hash_table; it : in out hash_iterator);
+	pragma inline(next);
+
+	-- Check if the actual hash_iterator is valid
+	function is_valid (it : in hash_iterator);
+	pragma inline(is_valid);
+
+	-- Put the item into the actual hash_iterator into and item introduced by
+	-- arguments
+	procedure get (it : in hash_iterator; x : out item);
+	pragma inline(get);
+
 
 private
 
@@ -80,5 +104,11 @@ private
 			dt : dispersion_table;
 			lists : a_of_lists;
 		end record;
+
+		type hash_iterator is
+			record
+				visit : enum;
+				lit : list_iterator;
+			end record;
 
 end dhash_table;
