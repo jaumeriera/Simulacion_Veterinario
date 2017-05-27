@@ -16,8 +16,8 @@ package dheap is
   procedure put (q : in out heap; k : in key; x : in item);
 
   procedure delete_least (q : in out heap);
-
   procedure get_least (q : in heap; x : out item; k : out key);
+
   pragma inline(get_least);
 
   function is_empty (q : in heap) return boolean;
@@ -31,7 +31,7 @@ private
         k : key; -- Sera el enumerado
       end record;
 
-    type mem_space is array (1..size) of components;
+    type mem_space is array (1..size) of component;
 
     type heap is
       record
