@@ -1,6 +1,7 @@
 generic
   size : positive := 50;
   type key is (<>);
+  type data is (<>);
   type item is private;
 package dheap is
 
@@ -13,9 +14,12 @@ package dheap is
   pragma inline(empty);
 
   procedure put (q : in out heap; k : in key; x : in item);
+
   procedure delete_least (q : in out heap);
 
-  function get_least (q : in heap) return item;
+  procedure get_least (q : in heap; x : out item; k : out key);
+  pragma inline(get_least);
+
   function is_empty (q : in heap) return boolean;
   pragma inline(is_empty);
 
@@ -23,8 +27,8 @@ private
 
     type component is
       record
-        x : item;
-        k : key;
+        x : item; -- Sera la key del animal
+        k : key; -- Sera el enumerado
       end record;
 
     type mem_space is array (1..size) of components;
