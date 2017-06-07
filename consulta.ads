@@ -25,6 +25,15 @@ package offices is
   -- Return if there are free consults
   function there_are_free_consults (c : in offices) return boolean;
 
+  -- Check if is posible remove
+  function can_remove (c : in offices) return boolean;
+
+  -- Check if is posible open new office
+  function can_open (c : in offices) return boolean;
+
+  -- Reduce the time of consult and delete empty offices
+  procedure check_time (c : in out offices; t : in time);
+
 private
 
   type office;
@@ -46,7 +55,7 @@ private
     record
       opened_offices : integer;
       free_offices : integer;
-      offices : list;
+      off : list;
     end record;
 
 end offices;

@@ -142,6 +142,35 @@ procedure veterinario is
     delete_least(q);
   end get_next_pet;
 
+  function calculate_time(pet_visit_type : in t_visit; cy : in integer) return integer is
+  begin
+    case pet_visit_type is
+      when cures => return 5 + cy;
+      when cirugies => return 8 + cy;
+      when emergencies => return 4 + cy;
+      when revisions => return 3 + cy;
+  end calculate_time;
+
+  procedure nurse_pet (ofi : in out offices; pet_key : in vet_hash; pet_visit_type : in t_enum; cy : in integer) is
+    atend_time : integer;
+  begin
+    atend_time := calculate_time(pet_visit_type, cy);
+    enter_in_consult(ofi, pet_visit_type, pet_key, atend_time);
+  end nurse_pet;
+
+  procedure update_office(offi : in out offices; c : in integer) is
+  begin
+    check_time(offi, c);
+    if can_open(offi) and then probability_is_met(probability_open_office) then
+      open_consult(offi);
+    end if;
+    if there_are_free_consults(offi) and then can_remove(offi) then
+      if probability_is_met(probability_close_office) then
+        close_consult(offi);
+      end if;
+    end if;
+  end update_office;
+
 begin
 
   -- Prepare random generator
@@ -150,14 +179,16 @@ begin
   -- Prepare structures
   vet_hash.empty(vet_DB);
   dheap.empty(vet_queue);
-  consulta.empty(offices);
+  consulta.empty(my_offices);
 
   while not end_of_simulation loop
 
     -- Check if some office is free and update the boolean passed by arguments
-    update_office(vet_office_free);
+    update_office(my_offices, cycle);
 
     if probability_is_met(probability_new_pet) then
+      -- Generar animal
+      
       check_in_pet(vet_DB, pet_name, pet_key);
       pet_visit_type := get_visit_type;
       delayed := calculate_delay(cycle, pet_visit_type);
@@ -168,7 +199,7 @@ begin
 
     if there_are_free_consults(offices) then
       get_next_pet(vet_queue, pet_key, pet_visit_type);
-      nurse_pet(pet_key, pet_visit_type);
+      nurse_pet(my_offices, pet_key, pet_visit_type, cycle);
     end if;
 
     -- Next cycle

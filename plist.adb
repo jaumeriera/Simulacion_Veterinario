@@ -65,4 +65,25 @@ package body plist is
 		x := it.pointer.x;
 	end get;
 
+	procedure remove(l : in out list; x : in integer) is
+		p, pp : pnode;
+		counter : integer := 1;
+	begin
+		p := l.first;
+		pp := null;
+		while p /= null loop
+			if x = counter and then
+				if counter /= 1 then
+					pp := p.next;
+					p.next := null; p := null;
+				else
+					l.first := p.next;
+				end if;
+			end if;
+			pp := p.next;
+			p := p.next;
+		end loop;
+
+	end remove;
+
 end plist;

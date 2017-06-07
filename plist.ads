@@ -14,6 +14,9 @@ package plist is
 	-- Introduce item in the list
 	procedure insert (l : in out list; x : in item);
 
+	-- Remove the element in the position specificated
+	procedure remove (l : in out list; x : in integer);
+
 	-- Return a boolean depending on the state of the list
 	function is_empty (l : in list) return boolean;
 	pragma inline(is_empty);
