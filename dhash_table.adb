@@ -105,7 +105,7 @@ package body dhash_table is
 	end is_in;
 
 	-- Insert one visit into a record of the block
-	procedure update (h : in out hash_table; k : in key; e : in enum) is
+	procedure update (h : in out hash_table; k : in key; e : in enum; t: in integer) is
 		p : pnode;
 	begin
 
@@ -122,6 +122,7 @@ package body dhash_table is
 		-- Create new node of record and update record
 		p := new node;
 		p.visit := e;
+		p.time := t;
 		p.next := memory(k).rec;
 
 		memory(k).rec := p;
@@ -147,38 +148,11 @@ package body dhash_table is
 
 	end get_key;
 
-
 	-- Return the item related to one key
 	function get_item (h : in hash_table; k : in key) return item is
 	begin
 		return memory(k).x;
 	end get_item;
-
-	--procedure show_components_by_enum (h : in hash_table; e : in enum) is
-	--	actual_list : list renames h.lists(e).key_list;
-	--	iterator : list_iterator;
-	--	k : key;
---begin
-		-- Information about number of visits of our enum
-	-- put("Numero de visitas del tipo ");
-	-- put(e);
-	--	put(" es de : ");
-	--	put(h.lists(e).component_number);
-	--	put_line("");
-
-		-- Print the name of our list components
-	--	put_line("Los nombre de los animales que han pasado por estas visitas son: ");
-
-		-- Visit all the elements in the list and print them
-		--first(actual_list, iterator);
-		--while is_valid(iterator) loop
-			--get(it, k);
-			--put_line(to_string(memory(k).x));
-			--next(actual_list, iterator);
-		--end loop;
-
-
-	--end show_components_by_enum;
 
 	-- Return the component_number of the list indexed by enum
 	function get_component_number (h : in hash_table; e : in enum) return integer is

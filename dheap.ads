@@ -2,6 +2,7 @@ generic
   size : positive := 50;
   type key is (<>);
   type item is private;
+  type enum is (<>);
 package dheap is
 
   type heap is limited private;
@@ -14,11 +15,11 @@ package dheap is
   procedure empty (q : out heap);
   pragma inline(empty);
 
-  procedure put (q : in out heap; k : in key; x : in item);
+  procedure put (q : in out heap; k : in key; x : in item; t : in enum);
 
   procedure delete_least (q : in out heap);
-  procedure get_least (q : in heap; x : out item; k : out key);
 
+  procedure get_least (q : in heap; x : out item; k : out key; t : out enum);
   pragma inline(get_least);
 
   function is_empty (q : in heap) return boolean;
@@ -34,7 +35,8 @@ package dheap is
   procedure next (q : in heap; it : in out heap_iterator);
   pragma inline(next);
 
-  procedure get (q : in heap; it : in heap_iterator; x : out item; k : out key);
+  procedure get (q : in heap; it : in heap_iterator; x : out item; k : out key;
+                                                                  t : out enum);
   pragma inline(get);
 
   function is_valid (it : in heap_iterator) return boolean;
@@ -45,7 +47,8 @@ private
     type component is
       record
         x : item; -- Sera la key del animal
-        k : key; -- Sera el enumerado
+        k : key; -- Seran los ciclos
+        t : enum -- Sera el tipo de visita
       end record;
 
     type mem_space is array (1..size) of component;

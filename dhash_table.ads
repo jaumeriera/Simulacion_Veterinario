@@ -27,7 +27,7 @@ package dhash_table is
 	function is_in (h : in  hash_table; x : in item) return boolean;
 
 	-- Update one element inserted in the dispersion table
-	procedure update (h : in out hash_table; k : in key; e : in enum);
+	procedure update (h : in out hash_table; k : in key; e : in enum; t : in integer);
 
 	-- Get the key of one element in the dispersion table by an item
 	-- introducied by parameters
@@ -89,6 +89,7 @@ private
 	type node is
 		record
 			visit : enum;
+			time : integer;
 			next : pnode;
 		end record;
 
