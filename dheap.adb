@@ -18,7 +18,7 @@ package body dheap is
     t := q.memory(1).t;
   end get_least;
 
-  procedure put (q : in out heap; k : in key; x : in item) is
+  procedure put (q : in out heap; k : in key; x : in item; t : in enum) is
     index, parent : natural;
   begin
     if q.n = size then raise space_overflow; end if;
@@ -51,7 +51,7 @@ package body dheap is
     -- Save the information of last element
     x := q.memory(q.n).x;
     k := q.memory(q.n).k;
-    t := q.memory(q.n).k;
+    t := q.memory(q.n).t;
 
     -- Decrement the size
     q.n := q.n - 1;
@@ -107,7 +107,7 @@ package body dheap is
     if not is_valid(it) then raise bad_use; end if;
     x := q.memory(it.index).x;
     k := q.memory(it.index).k;
-    k := q.memory(ti.index).t;
+    t := q.memory(it.index).t;
   end get;
 
   function is_valid (it : in heap_iterator) return boolean is

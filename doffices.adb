@@ -1,10 +1,10 @@
-package body consulta is
+package body doffices is
 
   procedure empty (c : out offices) is
   begin
     c.opened_offices := 1;
     c.free_offices := 1;
-    openedOffices.empty(c.offices);
+    openedOffices.empty(c.off);
   end empty;
 
   procedure enter_in_consult (c : in out offices; e : in enum; x : in item; t : in time) is
@@ -47,7 +47,7 @@ package body consulta is
 
   function can_remove(c : in offices) return boolean is
   begin
-    return c.opened_offices != 1;
+    return c.opened_offices /= 1;
   end can_remove;
 
   function can_open (c : in offices) return boolean is
@@ -55,7 +55,7 @@ package body consulta is
     return c.opened_offices < size;
   end can_open;
 
-  procedure check_time (c : in out offices, t : in time) is
+  procedure check_time (c : in out offices; t : in time) is
     lit : list_iterator;
     p : poffice;
     counter : integer := 1;
@@ -70,6 +70,6 @@ package body consulta is
       next(c.off,lit);
       counter := counter + 1;
     end loop;
-  end if;
+  end check_time;
 
-end consulta;
+end doffices;

@@ -1,3 +1,6 @@
+with plist;
+with exceptions;
+use exceptions;
 generic
 
   size : positive := 5;
@@ -5,7 +8,9 @@ generic
   type item is private;
   type time is (<>);
 
-package offices is
+package doffices is
+
+  type offices is limited private;
 
   -- Put to empty the structure to start working
   procedure empty (c : out offices);
@@ -58,4 +63,4 @@ private
       off : list;
     end record;
 
-end offices;
+end doffices;

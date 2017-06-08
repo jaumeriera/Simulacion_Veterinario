@@ -1,26 +1,34 @@
--- Falta modificar el put del heap para que introduzca ciclos
 with ada.numerics.discrete_random;
 with dhash_table;
+with dheap;
+with doffices;
 procedure veterinario is
 
   subtype rand_range is positive;
   package rand_int is new ada.numerics.discrete_random(rand_range);
-  use ada.numerics.discrete_random;
 
 
   -- Types and subtypes that we well use for the vet
-  type t_enum is (cures, cirugies, emergencies, revisions);
-  type a_of_delay is array (t_enum) of integer;
+  type t_visit is (cures, cirugies, emergencies, revisions);
+  --type a_of_delay is array (t_visit) of integer;
   subtype string30 is string (1..30);
 
 
   -- Variables related to vet
   cycle : integer := 1;
-  vet_office_free : boolean;
   pet_name : string30;
   pet_visit_type : t_visit;
   delayed : integer;
-  a_of_delayed : constant a_of_delay (1 .. 4);
+  --a_of_delayed : constant a_of_delay (1, 2, 3, 4);
+
+  procedure to_my_string (my_string : out string30; standar_string : in string) is
+    len : natural := 30;
+  begin
+    my_string := (others => ' ');
+    for index in standar_string'range loop
+      my_string(index) := standar_string(index);
+    end loop;
+  end to_my_string;
 
   -- Quadratic hash function extracted from the book "A primer on Program
   -- Construction IV. Data Structures" of Albert Llemosí
@@ -54,15 +62,15 @@ procedure veterinario is
                                                       hash => veterinario.hash);
   use vet_hash;
 
-  package vet_queue is new dheap(key => integer, item => vet_hash.key,
-                                                                  t => t_visit);
-  use vet_queue;
+  package priority_vet_queue is new dheap(key => integer, item => vet_hash.key,
+                                                                enum => t_visit);
+  use priority_vet_queue;
 
-  package vet_offices is new consulta(enum => t_visit, item => vet_hash.key,
+  package vet_offices is new doffices(enum => t_visit, item => vet_hash.key,
                                                                 time => integer);
   use vet_offices;
 
-  pet_key : dvet_hash.key;
+  pet_key : vet_hash.key;
   my_offices : offices;
 
   -- Database for the vet
@@ -77,23 +85,22 @@ procedure veterinario is
   probability_of_each_visit : constant integer := 25;
 
   -- Variables to work with random numbers
-  rnd : generator;
-  seed : integer;
+  rnd : rand_int.generator;
+  seed : integer := 100;
 
   -- Return a random number in %
   function get_random_number return integer is
   begin
-    return random(rnd) mod 100;
+    return rand_int.random(rnd) mod 100;
   end get_random_number;
 
   -- This function generate a random number and check if this number is in a
   -- probability passed by arguments
   function probability_is_met (probability : in integer) return boolean is
-    num_rand : integer;
   begin
     -- Check if is in probability
     return get_random_number<=probability;
-  end enter_new_pet;
+  end probability_is_met;
 
   -- This procedure check if the pet exist, if the pet doesn't exists register
   -- the pet and put the pet's key into a variable introduced by arguments, if
@@ -105,7 +112,7 @@ procedure veterinario is
       pet_key := get_key(DB, pet_name);
     else
       insert(DB, pet_key, pet_name);
-    end if
+    end if;
   end check_in_pet;
 
   -- Function that returns the type of visit, this type is calculated by
@@ -113,7 +120,8 @@ procedure veterinario is
   function get_visit_type return t_visit is
     num_rand : integer;
     acumulated_prob : integer;
-    counter : integer := 1;
+    type enum_index is new integer range 1..4;
+    counter : enum_index := 1;
   begin
 
     num_rand := get_random_number;
@@ -123,15 +131,24 @@ procedure veterinario is
       acumulated_prob := acumulated_prob + probability_of_each_visit;
       counter := counter + 1;
     end loop;
-
-    return t_visit(counter);
+    case counter is
+      when 1 => return cures;
+      when 2 => return cirugies;
+      when 3 => return emergencies;
+      when 4 => return revisions;
+    end case;
   end get_visit_type;
 
   -- Fucntion that calculate the delay for a pet depending on the type of visit
-  function calculate_delay (cycles : in integer, visit : in t_visit)
+  function calculate_delay (cycles : in integer; visit : in t_visit)
                                                               return integer is
   begin
-    return cycles-delayed(visit);
+    case visit is
+      when cures => return 1;
+      when revisions => return 2;
+      when cirugies => return 3;
+      when emergencies => return 4;
+    end case;
   end calculate_delay;
 
   procedure get_next_pet (q : in out heap; pet_key : out vet_hash.key;
@@ -149,9 +166,11 @@ procedure veterinario is
       when cirugies => return 8 + cy;
       when emergencies => return 4 + cy;
       when revisions => return 3 + cy;
+    end case;
   end calculate_time;
 
-  procedure nurse_pet (ofi : in out offices; pet_key : in vet_hash; pet_visit_type : in t_enum; cy : in integer) is
+  procedure nurse_pet (ofi : in out offices; pet_key : in vet_hash.key;
+                                pet_visit_type : in t_visit; cy : in integer) is
     atend_time : integer;
   begin
     atend_time := calculate_time(pet_visit_type, cy);
@@ -171,33 +190,39 @@ procedure veterinario is
     end if;
   end update_office;
 
-begin
+  procedure update_pet_history (history : in out hash_table; key : in vet_hash.key;
+                                  visit_type : in t_visit; cycles : in integer) is
+  begin
+    vet_hash.update(history, key, visit_type, cycles);
+  end update_pet_history;
 
+begin
+  to_my_string(pet_name,"yolanda");
   -- Prepare random generator
-  reset(rnd,seed);
+  rand_int.reset(rnd,seed);
 
   -- Prepare structures
   vet_hash.empty(vet_DB);
-  dheap.empty(vet_queue);
-  consulta.empty(my_offices);
+  priority_vet_queue.empty(vet_queue);
+  vet_offices.empty(my_offices);
 
-  while not end_of_simulation loop
+  --while not end_of_simulation loop
 
     -- Check if some office is free and update the boolean passed by arguments
     update_office(my_offices, cycle);
 
     if probability_is_met(probability_new_pet) then
       -- Generar animal
-      
+
       check_in_pet(vet_DB, pet_name, pet_key);
       pet_visit_type := get_visit_type;
       delayed := calculate_delay(cycle, pet_visit_type);
       --enter_in_waiting_room();
-      vet_queue.put(vet_queue, delayed, pet_key, pet_visit_type);
-      update_pet_history(pet_key, pet_visit_type, cycle);
+      priority_vet_queue.put(vet_queue, delayed, pet_key, pet_visit_type);
+      update_pet_history(vet_DB, pet_key, pet_visit_type, cycle);
     end if;
 
-    if there_are_free_consults(offices) then
+    if there_are_free_consults(my_offices) then
       get_next_pet(vet_queue, pet_key, pet_visit_type);
       nurse_pet(my_offices, pet_key, pet_visit_type, cycle);
     end if;
@@ -205,6 +230,6 @@ begin
     -- Next cycle
     cycle := cycle + 1;
 
-  end loop;
+  --end loop;
 
 end veterinario;

@@ -48,7 +48,7 @@ private
       record
         x : item; -- Sera la key del animal
         k : key; -- Seran los ciclos
-        t : enum -- Sera el tipo de visita
+        t : enum; -- Sera el tipo de visita
       end record;
 
     type mem_space is array (1..size) of component;

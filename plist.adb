@@ -66,13 +66,13 @@ package body plist is
 	end get;
 
 	procedure remove(l : in out list; x : in integer) is
-		p, pp : pnode;
+		p, pp : pcell;
 		counter : integer := 1;
 	begin
 		p := l.first;
 		pp := null;
 		while p /= null loop
-			if x = counter and then
+			if x = counter then
 				if counter /= 1 then
 					pp := p.next;
 					p.next := null; p := null;
